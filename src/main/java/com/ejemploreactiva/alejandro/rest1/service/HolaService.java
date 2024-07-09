@@ -1,29 +1,24 @@
 package com.ejemploreactiva.alejandro.rest1.service;
 
+import java.time.Duration;
+
 import org.springframework.stereotype.Service;
+
+import reactor.core.publisher.Mono;
 
 @Service
 public class HolaService {
 
     /** Sleep with thread 3 seconds */
-    public String hola() {
-
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return "Hola Sincrono";
+    public Mono<String> hola() {
+        
+        return Mono.just("Hola asincrono").delayElement(Duration.ofSeconds(3));
     }
 
     /** Sleep with thread 3 seconds */
-    public String hola2() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return "Hola Sincrono 2";
+    public Mono<String> hola2() {
+        
+        return Mono.just("Hola asincrono 2").delayElement(Duration.ofSeconds(3));
     }
 
 }

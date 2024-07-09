@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ejemploreactiva.alejandro.rest1.service.HolaService;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 @RestController
 public class ControladorHola {
 
@@ -13,27 +16,27 @@ public class ControladorHola {
     HolaService servicio;
 
     @RequestMapping("/hola")
-    public String hola() {
+    public Mono<String> hola() {
 
         System.out.println("Endpoint /hola llamado");
         return servicio.hola();
     }
 
     @RequestMapping("/hola2")
-    public String hola2() {
+    public Mono<String> hola2() {
 
         System.out.println("Endpoint /hola2 llamado");
         return servicio.hola2();
     }
 
     @RequestMapping("/holas")
-    public String holas() {
+    public Flux<String> holas() {
+        
+        Mono<String> mono1 = servicio.hola();
+        Mono<String> mono2 = servicio.hola2();
 
-        long t1 = System.currentTimeMillis();
-        String texto = servicio.hola() + servicio.hola2();
-        long t2 = System.currentTimeMillis();
-        System.out.println(t2 - t1);
-        int tTotal = (int) (t2 - t1);
-        return texto + String.valueOf(tTotal);
+        Flux<String> flujo = Flux.concat(mono1, mono2);
+     
+        return flujo;
     }
 }
